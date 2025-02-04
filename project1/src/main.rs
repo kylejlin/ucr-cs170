@@ -42,7 +42,7 @@ fn ask_for_initial_state() -> State {
     match read_line_from_stdin().trim() {
         "1" => DEFAULT_INITIAL_STATE,
 
-        "2" => ask_for_custom_puzzle(),
+        "2" => ask_for_custom_initial_state(),
 
         bad_response => {
             println!("Invalid input: {bad_response}. You must enter \"1\" or \"2\".");
@@ -51,8 +51,55 @@ fn ask_for_initial_state() -> State {
     }
 }
 
-fn ask_for_custom_puzzle() -> State {
-    todo!()
+fn ask_for_custom_initial_state() -> State {
+    println!("Enter your custom initial state, using a zero to represent the blank. Please only enter valid 8-puzzles. Please enter a space in between the numbers. Type RETURN only when finished with a row.");
+
+    let mut out = State {
+        board: [[Tile(0); PUZZLE_SIZE]; PUZZLE_SIZE],
+    };
+
+    for row in 0..PUZZLE_SIZE {
+        println!("Enter row {}:", row + 1);
+
+        let line = read_line_from_stdin();
+        let mut tiles = line.split_whitespace();
+
+        for col in 0..PUZZLE_SIZE {
+            let tile: u8 = tiles
+                .next()
+                .expect("Invalid input: You must enter 3 numbers per row.")
+                .trim()
+                .parse()
+                .expect("Invalid input: You must enter a number.");
+            out.board[row][col] = Tile(tile);
+        }
+    }
+
+    validate_custom_initial_state(out);
+
+    out
+}
+
+fn validate_custom_initial_state(state: State) {
+    let mut seen = [false; 9];
+
+    for row in 0..PUZZLE_SIZE {
+        for col in 0..PUZZLE_SIZE {
+            let tile = state.board[row][col].0;
+
+            if tile > 8 {
+                println!("Invalid input: \"{tile}\" is not a valid tile.");
+                exit_with_error();
+            }
+
+            if seen[tile as usize] {
+                println!("Invalid input: \"{tile}\" is used more than once.");
+                exit_with_error();
+            }
+
+            seen[tile as usize] = true;
+        }
+    }
 }
 
 fn ask_for_algorithm() -> Algorithm {

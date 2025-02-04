@@ -8,7 +8,7 @@ struct State {
     board: [[Tile; PUZZLE_SIZE]; PUZZLE_SIZE],
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Algorithm {
     UniformCostSearch,
     MisplacedTileHeuristic,
@@ -33,6 +33,8 @@ fn main() {
 }
 
 fn search(initial_state: State, algorithm: Algorithm) {
+    println!("State:\n{initial_state:?}\n\nAlgorithm:\n{algorithm:?}");
+
     todo!()
 }
 
@@ -129,4 +131,25 @@ fn read_line_from_stdin() -> String {
     use std::io::BufRead;
 
     std::io::stdin().lock().lines().next().unwrap().unwrap()
+}
+
+// Pretty-printing functions to make debugging more pleasant.
+
+impl std::fmt::Debug for Tile {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl std::fmt::Debug for State {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for row in 0..PUZZLE_SIZE {
+            for col in 0..PUZZLE_SIZE {
+                write!(f, "{:?} ", self.board[row][col])?;
+            }
+            writeln!(f)?;
+        }
+
+        Ok(())
+    }
 }

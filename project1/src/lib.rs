@@ -107,6 +107,22 @@ pub mod samples {
             [Tile(3), Tile(5), Tile(8)],
         ],
     };
+
+    pub const DEPTH_31: State = State {
+        board: [
+            [Tile(8), Tile(6), Tile(7)],
+            [Tile(2), Tile(5), Tile(4)],
+            [Tile(3), Tile(0), Tile(1)],
+        ],
+    };
+
+    pub const DEPTH_31_ALTERNATIVE: State = State {
+        board: [
+            [Tile(6), Tile(4), Tile(7)],
+            [Tile(8), Tile(5), Tile(0)],
+            [Tile(3), Tile(2), Tile(1)],
+        ],
+    };
 }
 
 pub const DEFAULT_INITIAL_STATE: State = samples::DEPTH_24;

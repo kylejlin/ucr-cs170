@@ -1,4 +1,5 @@
 use min_heap::MinHeap;
+use std::collections::HashSet;
 
 pub const PUZZLE_SIZE: usize = 3;
 
@@ -10,13 +11,13 @@ pub const GOAL_STATE: State = State {
     ],
 };
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Tile(u8);
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Coordinates(pub usize, pub usize);
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct State {
     board: [[Tile; PUZZLE_SIZE]; PUZZLE_SIZE],
 }
@@ -67,8 +68,10 @@ pub fn search(
     };
 
     let mut queue = MinHeap::new();
+    let mut visited = HashSet::new();
 
     queue.push(initial_node);
+    visited.insert(initial_state);
 
     loop {
         let Some(node) = queue.pop() else {
@@ -82,13 +85,14 @@ pub fn search(
             return Some(node);
         }
 
-        expand_queue(&node, &mut queue, algorithm, tracer);
+        expand_queue(&node, &mut queue, &mut visited, algorithm, tracer);
     }
 }
 
 fn expand_queue(
     parent_node: &Node,
     queue: &mut MinHeap<Node>,
+    visited: &mut HashSet<State>,
     algorithm: Algorithm,
     tracer: &mut impl io::SearchTracer,
 ) {
@@ -101,9 +105,13 @@ fn expand_queue(
                 + algorithm.estimate_cost_to_goal(&child_state),
         };
 
-        queue.push(child_node);
+        let was_newly_inserted = visited.insert(child_node.state);
 
-        tracer.on_enqueue(&child_node, queue);
+        if was_newly_inserted {
+            queue.push(child_node);
+
+            tracer.on_enqueue(&child_node, queue);
+        }
     })
 }
 

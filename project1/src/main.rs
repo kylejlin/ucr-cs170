@@ -55,6 +55,11 @@ fn main() {
 
 /// Returns `Some(solution)` if a solution was found, or `None` if no solution was found.
 fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
+    let initial_node = Node {
+        state: initial_state,
+        cost_to_reach: 0,
+    };
+
     // We'll use a simple (albeit inefficient) queue design:
     // Store the nodes in a vector in descending order of cost.
     // - To dequeue, just `pop()` the last element.
@@ -66,10 +71,7 @@ fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
     // but that's not the focus of this project, so I'm using this simple approach.
     let mut queue = Vec::new();
 
-    queue.push(Node {
-        state: initial_state,
-        cost_to_reach: 0,
-    });
+    queue.push(initial_node);
 
     loop {
         let Some(node) = queue.pop() else {
@@ -77,7 +79,7 @@ fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
             return None;
         };
 
-        if node.state == GOAL_STATE {
+        if node.state.is_goal() {
             return Some(node.state);
         }
 
@@ -86,7 +88,7 @@ fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
 }
 
 fn expand_queue(parent: &Node, queue: &mut Vec<Node>, algorithm: Algorithm) {
-    parent.for_each_child(|child| {
+    parent.state.for_each_child(|child| {
         let child_cost = algorithm.cost(&child);
 
         // Calculate the index where the child should be inserted.
@@ -114,14 +116,16 @@ impl Algorithm {
             // With Uniform Cost Search, we simply hardcode h(x) to 0.
             Algorithm::UniformCostSearch => 0,
 
-            Algorithm::MisplacedTileHeuristic => node.number_of_misplaced_tiles(),
+            Algorithm::MisplacedTileHeuristic => node.state.number_of_misplaced_tiles(),
 
-            Algorithm::ManhattanDistanceHeuristic => node.manhattan_distance_to_goal(),
+            Algorithm::ManhattanDistanceHeuristic => node.state.manhattan_distance_to_goal(),
         }
     }
 }
 
-impl Node {
+impl State {
+    /// Iterates over every child,
+    /// calling the visitor function `f` on each one.
     fn for_each_child(&self, mut f: impl FnMut(Node)) {
         todo!()
     }
@@ -132,6 +136,11 @@ impl Node {
 
     fn manhattan_distance_to_goal(&self) -> u32 {
         todo!()
+    }
+
+    fn is_goal(&self) -> bool {
+        // For this problem, there is only one goal state.
+        *self == GOAL_STATE
     }
 }
 

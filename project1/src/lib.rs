@@ -23,16 +23,18 @@ pub struct State {
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Node {
-    state: State,
+    pub state: State,
 
     /// The cost to reach this node starting from the root.
     /// For the root node, this is `0`.
     ///
     /// This is `g(x)` in the A* algorithm.
-    cost_to_reach: Cost,
+    ///
+    /// For the 8-puzzle, this is simply the depth of the node.
+    pub cost_to_reach: Cost,
 
     /// This is `f(x)` in the A* algorithm.
-    total_cost: Cost,
+    pub total_cost: Cost,
 }
 
 pub type Cost = u32;
@@ -53,7 +55,11 @@ pub const DEFAULT_INITIAL_STATE: State = State {
 };
 
 /// Returns `Some(solution)` if a solution was found, or `None` if no solution was found.
-pub fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
+pub fn search(
+    initial_state: State,
+    algorithm: Algorithm,
+    tracer: &mut impl io::SearchTracer,
+) -> Option<Node> {
     let initial_node = Node {
         state: initial_state,
         cost_to_reach: 0,
@@ -70,15 +76,22 @@ pub fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
             return None;
         };
 
+        tracer.on_dequeue(&node);
+
         if node.state.is_goal() {
-            return Some(node.state);
+            return Some(node);
         }
 
-        expand_queue(&node, &mut queue, algorithm);
+        expand_queue(&node, &mut queue, algorithm, tracer);
     }
 }
 
-fn expand_queue(parent_node: &Node, queue: &mut MinHeap<Node>, algorithm: Algorithm) {
+fn expand_queue(
+    parent_node: &Node,
+    queue: &mut MinHeap<Node>,
+    algorithm: Algorithm,
+    tracer: &mut impl io::SearchTracer,
+) {
     parent_node.state.for_each_child(|child_state| {
         let child_node = Node {
             state: child_state,
@@ -89,6 +102,8 @@ fn expand_queue(parent_node: &Node, queue: &mut MinHeap<Node>, algorithm: Algori
         };
 
         queue.push(child_node);
+
+        tracer.on_enqueue(&child_node, queue);
     })
 }
 
@@ -283,6 +298,5 @@ impl PartialOrd for Node {
     }
 }
 
+pub mod io;
 pub mod min_heap;
-pub mod pretty_print;
-pub mod ui;

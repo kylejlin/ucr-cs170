@@ -94,3 +94,28 @@ fn read_line_from_stdin() -> String {
 
     std::io::stdin().lock().lines().next().unwrap().unwrap()
 }
+
+pub trait SearchTracer {
+    fn on_dequeue(&mut self, node: &Node);
+
+    fn on_enqueue(&mut self, node: &Node, queue: &MinHeap<Node>);
+}
+
+impl std::fmt::Debug for Tile {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl std::fmt::Debug for State {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for row in 0..PUZZLE_SIZE {
+            for col in 0..PUZZLE_SIZE {
+                write!(f, "{:?} ", self.board[row][col])?;
+            }
+            writeln!(f)?;
+        }
+
+        Ok(())
+    }
+}

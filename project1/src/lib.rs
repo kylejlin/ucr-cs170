@@ -188,6 +188,12 @@ fn expand_queue(
         // 2. The child state has been visited before, but this path is shorter.
         //
         // Note that A* does _not_ guarantee that shorter paths are always found first.
+        //
+        // For example, consider the following states, evaluated using the Manhattan Distance Heuristic:
+        // 1. g(n) = 4, h(n) = 10
+        // 1 3 6
+        // 5 0 7
+        // 4 8 2
         if child_node.depth < visited.get(&child_node.state).copied().unwrap_or(u32::MAX) {
             queue.push(child_node);
 

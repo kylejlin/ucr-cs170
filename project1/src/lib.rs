@@ -165,7 +165,9 @@ impl State {
 
                 let expected = Tile((row * PUZZLE_SIZE + col + 1) as u8);
 
-                if self.board[row][col] != expected {
+                let actual = self.board[row][col];
+
+                if actual != expected {
                     count += 1;
                 }
             }

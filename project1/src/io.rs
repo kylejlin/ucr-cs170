@@ -19,14 +19,16 @@ fn ask_for_custom_initial_state() -> State {
     println!("Enter your custom initial state, using a zero to represent the blank. Please only enter valid 8-puzzles. Please enter a space in between the numbers. Type RETURN only when finished with a row.");
 
     let mut out = State {
-        board: [[Tile(0); PUZZLE_SIZE]; PUZZLE_SIZE],
+        // Use an obviously illegal dummy value to indicate that the board is uninitialized.
+        // This will make bugs more obvious.
+        board: [[Tile(9); PUZZLE_SIZE]; PUZZLE_SIZE],
     };
 
     for row in 0..PUZZLE_SIZE {
         println!("Enter row {}:", row + 1);
 
         let line = read_line_from_stdin();
-        let mut tiles = line.split_whitespace();
+        let mut tiles = line.trim().split_whitespace();
 
         for col in 0..PUZZLE_SIZE {
             let tile: u8 = tiles

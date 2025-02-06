@@ -1,3 +1,5 @@
+use std::ops::IndexMut;
+
 use min_heap::MinHeap;
 
 pub const PUZZLE_SIZE: usize = 3;
@@ -12,6 +14,9 @@ pub const GOAL_STATE: State = State {
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Tile(u8);
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct Coordinates(pub usize, pub usize);
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct State {
@@ -107,7 +112,45 @@ impl State {
     /// Iterates over every child,
     /// calling the visitor function `f` on each one.
     fn for_each_child(&self, mut f: impl FnMut(State)) {
-        todo!()
+        let blank_coords = self.blank_coords();
+
+        if let Some(c) = blank_coords.up() {
+            f(self.with_swapped_tiles(blank_coords, c));
+        }
+
+        if let Some(c) = blank_coords.down() {
+            f(self.with_swapped_tiles(blank_coords, c));
+        }
+
+        if let Some(c) = blank_coords.left() {
+            f(self.with_swapped_tiles(blank_coords, c));
+        }
+
+        if let Some(c) = blank_coords.right() {
+            f(self.with_swapped_tiles(blank_coords, c));
+        }
+    }
+
+    fn with_swapped_tiles(&self, a: Coordinates, b: Coordinates) -> State {
+        let mut out = *self;
+
+        let temp = out[a];
+        out[a] = out[b];
+        out[b] = temp;
+
+        out
+    }
+
+    fn blank_coords(&self) -> Coordinates {
+        for row in 0..PUZZLE_SIZE {
+            for col in 0..PUZZLE_SIZE {
+                if self.board[row][col] == Tile(0) {
+                    return Coordinates(row, col);
+                }
+            }
+        }
+
+        panic!("Unreachable: Every state should have a blank tile.")
     }
 
     fn number_of_misplaced_tiles(&self) -> u32 {
@@ -121,6 +164,54 @@ impl State {
     fn is_goal(&self) -> bool {
         // For this problem, there is only one goal state.
         *self == GOAL_STATE
+    }
+}
+
+impl Coordinates {
+    fn up(&self) -> Option<Coordinates> {
+        if self.0 <= 0 {
+            None
+        } else {
+            Some(Coordinates(self.0 - 1, self.1))
+        }
+    }
+
+    fn down(&self) -> Option<Coordinates> {
+        if self.0 >= PUZZLE_SIZE - 1 {
+            None
+        } else {
+            Some(Coordinates(self.0 + 1, self.1))
+        }
+    }
+
+    fn left(&self) -> Option<Coordinates> {
+        if self.1 <= 0 {
+            None
+        } else {
+            Some(Coordinates(self.0, self.1 - 1))
+        }
+    }
+
+    fn right(&self) -> Option<Coordinates> {
+        if self.1 >= PUZZLE_SIZE - 1 {
+            None
+        } else {
+            Some(Coordinates(self.0, self.1 + 1))
+        }
+    }
+}
+
+impl std::ops::Index<Coordinates> for State {
+    type Output = Tile;
+
+    fn index(&self, index: Coordinates) -> &Self::Output {
+        &self.board[index.0][index.1]
+    }
+}
+
+impl std::ops::IndexMut<Coordinates> for State {
+    fn index_mut(&mut self, index: Coordinates) -> &mut Self::Output {
+        &mut self.board[index.0][index.1]
     }
 }
 

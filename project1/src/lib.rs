@@ -47,13 +47,69 @@ pub enum Algorithm {
     ManhattanDistanceHeuristic,
 }
 
-pub const DEFAULT_INITIAL_STATE: State = State {
-    board: [
-        [Tile(1), Tile(2), Tile(3)],
-        [Tile(4), Tile(0), Tile(6)],
-        [Tile(7), Tile(5), Tile(8)],
-    ],
-};
+pub mod samples {
+    use super::*;
+
+    pub const DEPTH_0: State = GOAL_STATE;
+
+    pub const DEPTH_2: State = State {
+        board: [
+            [Tile(1), Tile(2), Tile(3)],
+            [Tile(4), Tile(5), Tile(6)],
+            [Tile(0), Tile(7), Tile(8)],
+        ],
+    };
+
+    pub const DEPTH_4: State = State {
+        board: [
+            [Tile(1), Tile(2), Tile(3)],
+            [Tile(5), Tile(0), Tile(6)],
+            [Tile(4), Tile(7), Tile(8)],
+        ],
+    };
+
+    pub const DEPTH_8: State = State {
+        board: [
+            [Tile(1), Tile(3), Tile(6)],
+            [Tile(5), Tile(0), Tile(2)],
+            [Tile(4), Tile(7), Tile(8)],
+        ],
+    };
+
+    pub const DEPTH_12: State = State {
+        board: [
+            [Tile(1), Tile(3), Tile(6)],
+            [Tile(5), Tile(0), Tile(7)],
+            [Tile(4), Tile(8), Tile(2)],
+        ],
+    };
+
+    pub const DEPTH_16: State = State {
+        board: [
+            [Tile(1), Tile(6), Tile(7)],
+            [Tile(5), Tile(0), Tile(3)],
+            [Tile(4), Tile(8), Tile(2)],
+        ],
+    };
+
+    pub const DEPTH_20: State = State {
+        board: [
+            [Tile(7), Tile(1), Tile(2)],
+            [Tile(4), Tile(8), Tile(5)],
+            [Tile(6), Tile(3), Tile(0)],
+        ],
+    };
+
+    pub const DEPTH_24: State = State {
+        board: [
+            [Tile(0), Tile(7), Tile(2)],
+            [Tile(4), Tile(6), Tile(1)],
+            [Tile(3), Tile(5), Tile(8)],
+        ],
+    };
+}
+
+pub const DEFAULT_INITIAL_STATE: State = samples::DEPTH_24;
 
 /// Returns `Some(solution)` if a solution was found, or `None` if no solution was found.
 pub fn search(

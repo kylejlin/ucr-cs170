@@ -1,5 +1,5 @@
 // Rust's standard library already comes with a max heap.
-// However, we need a min heap for our A* algorithm.
+// However, we need a _min_ heap for our A* algorithm.
 // So, we implement a min heap by creating a
 // simple wrapper (around the built-in max heap) that
 // inverts the ordering of the elements.

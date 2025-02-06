@@ -154,7 +154,24 @@ impl State {
     }
 
     fn number_of_misplaced_tiles(&self) -> u32 {
-        todo!()
+        let mut count = 0;
+
+        for row in 0..PUZZLE_SIZE {
+            for col in 0..PUZZLE_SIZE {
+                // Don't count the blank.
+                if (row, col) == (PUZZLE_SIZE - 1, PUZZLE_SIZE - 1) {
+                    continue;
+                }
+
+                let expected = Tile((row * PUZZLE_SIZE + col + 1) as u8);
+
+                if self.board[row][col] != expected {
+                    count += 1;
+                }
+            }
+        }
+
+        count
     }
 
     fn manhattan_distance_to_goal(&self) -> u32 {

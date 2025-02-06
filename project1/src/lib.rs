@@ -191,7 +191,7 @@ fn expand_queue(
         //
         // For example, consider the following initial state, evaluated using the Manhattan Distance Heuristic:
         //
-        // STATE A
+        // STATE A [g(x) = 0, h(x) = 12, f(x) = 12]
         // 1 6 7
         // 5 0 3
         // 4 8 2
@@ -199,12 +199,12 @@ fn expand_queue(
         // If we search usiing A* with the Manhattan Distance Heuristic,
         // we may reach the following nodes at some point:
         //
-        // STATE B [g(n) = 4, h(n) = 10, f(n) = 14]
+        // STATE B [g(x) = 4, h(x) = 10, f(x) = 14]
         // 1 3 6
         // 5 0 7
         // 4 8 2
         //
-        // STATE C [g(n) = 6, h(n) = 8, f(n) = 14]
+        // STATE C [g(x) = 6, h(x) = 8, f(x) = 14]
         // 1 3 0
         // 5 7 6
         // 4 8 2

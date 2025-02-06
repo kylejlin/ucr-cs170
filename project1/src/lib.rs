@@ -59,6 +59,10 @@ pub const DEFAULT_INITIAL_STATE: State = State {
 pub fn search(
     initial_state: State,
     algorithm: Algorithm,
+
+    // A tracer is just a fancy callback function.
+    // We can use it for things like printing trace information to stdout,
+    // or keeping track of the maximum queue size.
     tracer: &mut impl io::SearchTracer,
 ) -> Option<Node> {
     let initial_node = Node {
@@ -99,14 +103,19 @@ fn expand_queue(
     parent_node.state.for_each_child(|child_state| {
         let child_node = Node {
             state: child_state,
+
+            // g(x)_child = g(x)_parent + 1
             cost_to_reach: parent_node.cost_to_reach + 1,
+
+            // f(x)_child = g(x)_child + h(x)_child = g(x)_parent + 1 + h(x)_child
             total_cost: parent_node.cost_to_reach
                 + 1
                 + algorithm.estimate_cost_to_goal(&child_state),
         };
 
+        // Check to see if the child has already been visited before
+        // enqueueing it.
         let was_newly_inserted = visited.insert(child_node.state);
-
         if was_newly_inserted {
             queue.push(child_node);
 
@@ -134,6 +143,9 @@ impl State {
     /// calling the visitor function `f` on each one.
     fn for_each_child(&self, mut f: impl FnMut(State)) {
         let blank_coords = self.blank_coords();
+
+        // We represent our operators as "Move the blank up", "Move the blank down", etc.
+        // Thus, we have at most 4 legal operators in any given state.
 
         if let Some(c) = blank_coords.up() {
             f(self.with_swapped_tiles(blank_coords, c));

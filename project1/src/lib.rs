@@ -191,16 +191,18 @@ impl State {
 
         for row in 0..PUZZLE_SIZE {
             for col in 0..PUZZLE_SIZE {
+                let tile = self.board[row][col];
+
                 // Don't count the blank.
-                if (row, col) == (PUZZLE_SIZE - 1, PUZZLE_SIZE - 1) {
+                if tile == Tile(0) {
                     continue;
                 }
 
-                let expected = Tile((row * PUZZLE_SIZE + col + 1) as u8);
+                let actual_coords = Coordinates(row, col);
 
-                let actual = self.board[row][col];
+                let expected_coords = tile.expected_coords();
 
-                if actual != expected {
+                if actual_coords != expected_coords {
                     count += 1;
                 }
             }

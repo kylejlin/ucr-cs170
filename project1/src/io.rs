@@ -85,6 +85,45 @@ pub fn ask_for_algorithm() -> Algorithm {
     }
 }
 
+pub fn print_solution_status(solution: &Option<Node>) {
+    if let Some(s) = solution {
+        println!("Solution found!\nSolution depth: {}", s.cost_to_reach);
+    } else {
+        println!("No solution found.");
+    }
+}
+
+pub struct PrintTracer {
+    pub max_queue_size: usize,
+    pub nodes_expanded: usize,
+}
+
+impl io::SearchTracer for PrintTracer {
+    fn on_dequeue(&mut self, node: &Node) {
+        self.nodes_expanded += 1;
+
+        println!(
+            "The best state to expand with a g(n) = {} and h(n) = {} is...\n{:?}",
+            node.cost_to_reach,
+            node.total_cost - node.cost_to_reach,
+            node.state,
+        );
+    }
+
+    fn on_enqueue(&mut self, _: &Node, queue: &min_heap::MinHeap<Node>) {
+        self.max_queue_size = self.max_queue_size.max(queue.len());
+    }
+}
+
+impl PrintTracer {
+    pub fn print_stats(&self) {
+        println!(
+            "Nodes expanded: {}\nMax queue size: {}",
+            self.nodes_expanded, self.max_queue_size
+        );
+    }
+}
+
 fn exit_with_error() -> ! {
     println!("Exiting with error due to invalid user input. Please run this program again and enter valid inputs.");
 

@@ -8,7 +8,7 @@ fn main() {
     let algorithm = io::ask_for_algorithm();
 
     let mut tracer = io::PrintTracer {
-        max_queue_size: 0,
+        max_queue_size: 1,
         nodes_expanded: 0,
     };
 

@@ -222,8 +222,6 @@ fn expand_queue(
         // If C is expanded first, it is possible we may reach D through C
         // before expanding B.
         // Therefore, if we used a naive HashSet, we would not find the shortest path to D.
-        //
-        // Unfortunately, I only realized this after hours of debugging.
 
         if child_node.depth < visited.get(&child_node.state).copied().unwrap_or(u32::MAX) {
             queue.push(child_node);

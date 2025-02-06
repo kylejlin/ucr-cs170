@@ -1,5 +1,3 @@
-use std::ops::IndexMut;
-
 use min_heap::MinHeap;
 
 pub const PUZZLE_SIZE: usize = 3;

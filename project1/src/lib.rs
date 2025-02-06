@@ -1,5 +1,5 @@
 use min_heap::MinHeap;
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 pub const PUZZLE_SIZE: usize = 3;
 
@@ -32,7 +32,7 @@ pub struct Node {
     /// This is `g(x)` in the A* algorithm.
     ///
     /// For the 8-puzzle, this is simply the depth of the node.
-    pub cost_to_reach: Cost,
+    pub depth: Cost,
 
     /// This is `f(x)` in the A* algorithm.
     pub total_cost: Cost,
@@ -139,15 +139,15 @@ pub fn search(
 ) -> Option<Node> {
     let initial_node = Node {
         state: initial_state,
-        cost_to_reach: 0,
+        depth: 0,
         total_cost: algorithm.estimate_cost_to_goal(&initial_state),
     };
 
     let mut queue = MinHeap::new();
-    let mut visited = HashSet::new();
+    let mut visited = HashMap::new();
 
     queue.push(initial_node);
-    visited.insert(initial_state);
+    visited.insert(initial_state, 0);
 
     loop {
         let Some(node) = queue.pop() else {
@@ -168,7 +168,7 @@ pub fn search(
 fn expand_queue(
     parent_node: &Node,
     queue: &mut MinHeap<Node>,
-    visited: &mut HashSet<State>,
+    visited: &mut HashMap<State, u32>,
     algorithm: Algorithm,
     tracer: &mut impl io::SearchTracer,
 ) {
@@ -177,19 +177,21 @@ fn expand_queue(
             state: child_state,
 
             // g(x)_child = g(x)_parent + 1
-            cost_to_reach: parent_node.cost_to_reach + 1,
+            depth: parent_node.depth + 1,
 
             // f(x)_child = g(x)_child + h(x)_child = g(x)_parent + 1 + h(x)_child
-            total_cost: parent_node.cost_to_reach
-                + 1
-                + algorithm.estimate_cost_to_goal(&child_state),
+            total_cost: parent_node.depth + 1 + algorithm.estimate_cost_to_goal(&child_state),
         };
 
-        // Check to see if the child has already been visited before
-        // enqueueing it.
-        let was_newly_inserted = visited.insert(child_node.state);
-        if was_newly_inserted {
+        // Only enqueue the child if at least one of the following is true:
+        // 1. The child state has never been visited before.
+        // 2. The child state has been visited before, but this path is shorter.
+        //
+        // Note that A* does _not_ guarantee that shorter paths are always found first.
+        if child_node.depth < visited.get(&child_node.state).copied().unwrap_or(u32::MAX) {
             queue.push(child_node);
+
+            visited.insert(child_node.state, child_node.depth);
 
             tracer.on_enqueue(&child_node, queue);
         }

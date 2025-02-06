@@ -87,7 +87,7 @@ pub fn ask_for_algorithm() -> Algorithm {
 
 pub fn print_solution_status(solution: &Option<Node>) {
     if let Some(s) = solution {
-        println!("Solution found!\nSolution depth: {}", s.cost_to_reach);
+        println!("Solution found!\nSolution depth: {}", s.depth);
     } else {
         println!("No solution found.");
     }
@@ -104,8 +104,8 @@ impl io::SearchTracer for PrintTracer {
 
         println!(
             "The best state to expand with a g(n) = {} and h(n) = {} is...\n{:?}",
-            node.cost_to_reach,
-            node.total_cost - node.cost_to_reach,
+            node.depth,
+            node.total_cost - node.depth,
             node.state,
         );
     }

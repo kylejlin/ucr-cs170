@@ -189,11 +189,42 @@ fn expand_queue(
         //
         // Note that A* does _not_ guarantee that shorter paths are always found first.
         //
-        // For example, consider the following states, evaluated using the Manhattan Distance Heuristic:
-        // 1. g(n) = 4, h(n) = 10
+        // For example, consider the following initial state, evaluated using the Manhattan Distance Heuristic:
+        //
+        // STATE A
+        // 1 6 7
+        // 5 0 3
+        // 4 8 2
+        //
+        // If we search usiing A* with the Manhattan Distance Heuristic,
+        // we may reach the following nodes at some point:
+        //
+        // STATE B [g(n) = 4, h(n) = 10, f(n) = 14]
         // 1 3 6
         // 5 0 7
         // 4 8 2
+        //
+        // STATE C [g(n) = 6, h(n) = 8, f(n) = 14]
+        // 1 3 0
+        // 5 7 6
+        // 4 8 2
+        //
+        // Note that the total cost of both B and C is 14.
+        // **This means they could be expanded in any order.**
+        //
+        // Now, the following state is a child both of B and C:
+        //
+        // STATE D
+        // 1 3 6
+        // 5 7 0
+        // 4 8 2
+        //
+        // If C is expanded first, it is possible we may reach D through C
+        // before expanding B.
+        // Therefore, if we used a naive HashSet, we would not find the shortest path to D.
+        //
+        // Unfortunately, I only realized this after hours of debugging.
+
         if child_node.depth < visited.get(&child_node.state).copied().unwrap_or(u32::MAX) {
             queue.push(child_node);
 

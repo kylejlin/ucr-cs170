@@ -1,4 +1,14 @@
+use std::collections::VecDeque;
+
 const PUZZLE_SIZE: usize = 3;
+
+const GOAL_STATE: State = State {
+    board: [
+        [Tile(1), Tile(2), Tile(3)],
+        [Tile(4), Tile(5), Tile(6)],
+        [Tile(7), Tile(8), Tile(0)],
+    ],
+};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct Tile(u8);
@@ -32,10 +42,31 @@ fn main() {
     search(initial_state, algorithm);
 }
 
-fn search(initial_state: State, algorithm: Algorithm) {
-    println!("State:\n{initial_state:?}\n\nAlgorithm:\n{algorithm:?}");
+/**
+ * Returns `Some(solution)` if a solution was found, or `None` if no solution was found.
+ */
+fn search(initial_state: State, algorithm: Algorithm) -> Option<State> {
+    let mut nodes = VecDeque::new();
+    nodes.push_back(initial_state);
 
-    todo!()
+    loop {
+        let Some(node) = nodes.pop_front() else {
+            // If the queue is empty, there is no solution.
+            return None;
+        };
+
+        if node == GOAL_STATE {
+            return Some(node);
+        }
+
+        node.expand_with_children(&mut nodes, algorithm);
+    }
+}
+
+impl State {
+    fn expand_with_children(&self, nodes: &mut VecDeque<State>, algorithm: Algorithm) {
+        todo!()
+    }
 }
 
 fn ask_for_initial_state() -> State {

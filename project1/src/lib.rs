@@ -177,7 +177,28 @@ impl State {
     }
 
     fn manhattan_distance_to_goal(&self) -> u32 {
-        todo!()
+        let mut total_distance = 0;
+
+        for row in 0..PUZZLE_SIZE {
+            for col in 0..PUZZLE_SIZE {
+                let tile = self.board[row][col];
+
+                // Don't count the blank.
+                if tile == Tile(0) {
+                    continue;
+                }
+
+                let actual_coords = Coordinates(row, col);
+
+                let expected_coords = tile.expected_coords();
+
+                let distance = actual_coords.manhattan_distance_to(&expected_coords);
+
+                total_distance += distance;
+            }
+        }
+
+        total_distance
     }
 
     fn is_goal(&self) -> bool {
@@ -217,6 +238,24 @@ impl Coordinates {
         } else {
             Some(Coordinates(self.0, self.1 + 1))
         }
+    }
+
+    fn manhattan_distance_to(&self, other: &Coordinates) -> u32 {
+        let row_distance = (self.0 as i32 - other.0 as i32).abs();
+        let col_distance = (self.1 as i32 - other.1 as i32).abs();
+
+        (row_distance + col_distance) as u32
+    }
+}
+
+impl Tile {
+    fn expected_coords(&self) -> Coordinates {
+        let index = self.0 - 1;
+
+        let row = index / PUZZLE_SIZE as u8;
+        let col = index % PUZZLE_SIZE as u8;
+
+        Coordinates(row as usize, col as usize)
     }
 }
 

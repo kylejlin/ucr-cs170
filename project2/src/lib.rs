@@ -104,7 +104,7 @@ pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSe
     let mut correct_count = 0;
 
     for (instance_index, instance) in dataset.instances.iter().enumerate() {
-        let mut closest_distance = f64::INFINITY;
+        let mut closest_square_distance = f64::INFINITY;
         let mut closest_class = ClassStartingFrom1(1);
 
         for (other_index, other) in dataset.instances.iter().enumerate() {
@@ -113,10 +113,10 @@ pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSe
                 continue;
             }
 
-            let distance = instance.square_distance_to(other, feature_set);
+            let square_distance = instance.square_distance_to(other, feature_set);
 
-            if distance < closest_distance {
-                closest_distance = distance;
+            if square_distance < closest_square_distance {
+                closest_square_distance = square_distance;
                 closest_class = other.class;
             }
         }

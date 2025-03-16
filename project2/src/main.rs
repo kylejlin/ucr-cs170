@@ -3,17 +3,7 @@ use cs170_project2::*;
 fn main() {
     println!("Welcome to Kyle Lin's Feature Selection Algorithm!");
 
-    let file_content = io::ask_user_for_file_path_and_then_read_file();
-
-    let dataset = match io::parse_dataset(&file_content) {
-        Ok(d) => d,
-
-        Err(e) => {
-            println!("The file you specified was malformatted. Error: {:?}", e);
-            std::process::exit(1);
-        }
-    };
-
+    let dataset = io::ask_user_for_dataset_file_path_and_then_parse();
     let algorithm = io::ask_user_for_algorithm();
 
     println!(

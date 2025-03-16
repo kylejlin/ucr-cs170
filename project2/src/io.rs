@@ -135,21 +135,31 @@ pub fn parse_dataset(s: &str) -> Result<Dataset, DatasetSyntaxError> {
     })
 }
 
-/// Asks the user for a file path, and then reads the file at that path.
-/// If the file cannot be read (e.g., because the path points to a nonexistent location),
-/// then this function repeatedly asks the user for a file path until a valid file is found.
-pub fn ask_user_for_file_path_and_then_read_file() -> String {
+/// Asks the user for a file path, and then reads and parses the file at that path.
+/// If the file cannot be read (e.g., because the path points to a nonexistent location,
+/// the file is malformatted, etc.), then this function repeatedly
+/// asks the user for a file path until a valid file is found.
+pub fn ask_user_for_dataset_file_path_and_then_parse() -> Dataset {
     loop {
-        print!("Type in the path to the file to test: ");
+        println!("Type in the path to the file to test:");
 
         let path = read_line_from_stdin();
         let path = std::path::Path::new(&path);
 
-        match std::fs::read_to_string(path) {
-            Ok(c) => return c,
+        let file_content = match std::fs::read_to_string(path) {
+            Ok(c) => c,
 
             Err(e) => {
                 println!("Error reading file: {:?}", e);
+                continue;
+            }
+        };
+
+        match parse_dataset(&file_content) {
+            Ok(d) => return d,
+
+            Err(e) => {
+                println!("The file you specified contained a syntax error: {:?}", e);
                 continue;
             }
         }
@@ -161,7 +171,7 @@ pub fn ask_user_for_algorithm() -> Algorithm {
         println!("Type the number of the algorithm you want to run.");
         println!("1) Forward Selection");
         println!("2) Backward Elimination");
-        print!("Enter the number of the algorithm you want to run: ");
+        println!("Enter the number of the algorithm you want to run:");
 
         let choice = read_line_from_stdin();
 

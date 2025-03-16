@@ -101,8 +101,32 @@ pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
 /// and returns the accuracy rate.
 /// Only the features in `feature_set` are used.
 pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSet) -> f64 {
-    // TODO
-    0.123456789
+    let mut correct_count = 0;
+
+    for (instance_index, instance) in dataset.instances.iter().enumerate() {
+        let mut closest_distance = f64::INFINITY;
+        let mut closest_class = ClassStartingFrom1(1);
+
+        for (other_index, other) in dataset.instances.iter().enumerate() {
+            // Don't compare an instance to itself, since the distance is always 0.
+            if instance_index == other_index {
+                continue;
+            }
+
+            let distance = instance.square_distance_to(other, feature_set);
+
+            if distance < closest_distance {
+                closest_distance = distance;
+                closest_class = other.class;
+            }
+        }
+
+        if closest_class == instance.class {
+            correct_count += 1;
+        }
+    }
+
+    correct_count as f64 / dataset.instances.len() as f64
 }
 
 impl Dataset {
@@ -142,5 +166,22 @@ impl FeatureSet {
         let mut out = self.clone();
         out.remove(feature);
         out
+    }
+}
+
+impl Instance {
+    pub fn square_distance_to(&self, other: &Instance, feature_set: &FeatureSet) -> f64 {
+        let mut sum = 0.0;
+
+        for (feature_index, is_included) in feature_set.0.iter().enumerate() {
+            if !*is_included {
+                continue;
+            }
+
+            let diff = self.feature_values[feature_index] - other.feature_values[feature_index];
+            sum += diff * diff;
+        }
+
+        sum
     }
 }

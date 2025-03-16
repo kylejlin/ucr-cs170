@@ -30,24 +30,14 @@ impl ToPretty for FeatureSet {}
 
 impl std::fmt::Display for Pretty<&FeatureSet> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let Pretty(features) = self;
-
         write!(f, "{{")?;
 
-        let mut has_written_at_least_one_feature = false;
-
-        for (feature_index_starting_from_0, is_included) in self.0 .0.iter().enumerate() {
-            if !is_included {
-                continue;
-            }
-
-            if has_written_at_least_one_feature {
+        for (i, FeatureStartingFrom1(feature)) in self.0 .0.iter().enumerate() {
+            if i != 0 {
                 write!(f, ",")?;
             }
 
-            write!(f, "{}", feature_index_starting_from_0 + 1)?;
-
-            has_written_at_least_one_feature = true;
+            write!(f, "{}", feature)?;
         }
 
         write!(f, "}}")

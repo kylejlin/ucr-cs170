@@ -25,10 +25,8 @@ pub struct ClassStartingFrom1(pub usize);
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct FeatureStartingFrom1(pub usize);
 
-/// We implement a feature set of an array _B_ of booleans.
-/// The _i_-th feature is in the set if and only if _B\[i-1\]_ is `true`.
 #[derive(Debug, Clone)]
-pub struct FeatureSet(pub Vec<bool>);
+pub struct FeatureSet(pub Vec<FeatureStartingFrom1>);
 
 #[derive(Debug)]
 pub struct Instance {
@@ -40,8 +38,8 @@ pub struct Instance {
 pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
     println!("Beginning forward selection.");
 
-    let mut current_set = dataset.empty_feature_set();
-    let mut best_set = current_set.clone();
+    let mut current_set = FeatureSet(vec![]);
+    let mut best_set = FeatureSet(vec![]);
     let mut best_accuracy = -1.0;
 
     for _ in 0..dataset.feature_count {
@@ -135,21 +133,17 @@ impl Dataset {
     }
 
     pub fn complete_feature_set(&self) -> FeatureSet {
-        FeatureSet(vec![true; self.feature_count])
-    }
-
-    pub fn empty_feature_set(&self) -> FeatureSet {
-        FeatureSet(vec![false; self.feature_count])
+        FeatureSet(self.features().collect())
     }
 }
 
 impl FeatureSet {
     pub fn contains(&self, feature: FeatureStartingFrom1) -> bool {
-        self.0[feature.0 - 1]
+        self.0.contains(&feature)
     }
 
     pub fn add(&mut self, feature: FeatureStartingFrom1) {
-        self.0[feature.0 - 1] = true;
+        self.0.push(feature);
     }
 
     pub fn adding(&self, feature: FeatureStartingFrom1) -> FeatureSet {
@@ -159,7 +153,7 @@ impl FeatureSet {
     }
 
     pub fn remove(&mut self, feature: FeatureStartingFrom1) {
-        self.0[feature.0 - 1] = false;
+        self.0.retain(|&f| f != feature);
     }
 
     pub fn removing(&self, feature: FeatureStartingFrom1) -> FeatureSet {
@@ -167,17 +161,18 @@ impl FeatureSet {
         out.remove(feature);
         out
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = FeatureStartingFrom1> + '_ {
+        self.0.iter().copied()
+    }
 }
 
 impl Instance {
     pub fn square_distance_to(&self, other: &Instance, feature_set: &FeatureSet) -> f64 {
         let mut sum = 0.0;
 
-        for (feature_index, is_included) in feature_set.0.iter().enumerate() {
-            if !*is_included {
-                continue;
-            }
-
+        for feature in feature_set.iter() {
+            let feature_index = feature.0 - 1;
             let diff = self.feature_values[feature_index] - other.feature_values[feature_index];
             sum += diff * diff;
         }

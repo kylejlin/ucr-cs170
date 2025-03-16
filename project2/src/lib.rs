@@ -92,7 +92,59 @@ pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
 }
 
 pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
-    panic!("TODO: Backward search is not implemented yet.");
+    println!("Beginning backward elimination.");
+
+    let mut current_set = dataset.complete_feature_set();
+    let mut best_set = dataset.complete_feature_set();
+    let mut best_accuracy = leave_out_one_cross_validation(dataset, &current_set);
+
+    for _ in 0..dataset.feature_count {
+        let mut best_feature: Option<FeatureStartingFrom1> = None;
+        let mut best_accuracy_for_current_outer_iteration = -1.0;
+
+        for candidate_feature in dataset.features() {
+            // Don't remove the feature if it was already removed.
+            if !current_set.contains(candidate_feature) {
+                continue;
+            }
+
+            let reduced_set = current_set.removing(candidate_feature);
+
+            let accuracy = leave_out_one_cross_validation(&dataset, &reduced_set);
+
+            println!(
+                "    Using feature(s) {} accuracy is {:.1}%",
+                reduced_set.pretty(),
+                accuracy * 100.0
+            );
+
+            if accuracy > best_accuracy_for_current_outer_iteration {
+                best_accuracy_for_current_outer_iteration = accuracy;
+                best_feature = Some(candidate_feature);
+            }
+        }
+
+        let best_feature = best_feature.unwrap();
+        current_set.remove(best_feature);
+        println!(
+            "Feature set {} was best, accuracy is {:.1}%",
+            current_set.pretty(),
+            best_accuracy_for_current_outer_iteration * 100.0
+        );
+
+        if best_accuracy_for_current_outer_iteration > best_accuracy {
+            best_accuracy = best_accuracy_for_current_outer_iteration;
+            best_set = current_set.clone();
+        }
+    }
+
+    println!(
+        "Finished search! The best feature subset is {}, which has an accuracy of {:.1}%.",
+        best_set.pretty(),
+        best_accuracy * 100.0
+    );
+
+    best_set
 }
 
 /// Performs leave-one-out cross validation on the dataset
@@ -124,7 +176,7 @@ pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSe
         }
     }
 
-    correct_count as f64 / dataset.instances.len() as f64
+    (correct_count as f64) / (dataset.instances.len() as f64)
 }
 
 impl Dataset {

@@ -26,42 +26,28 @@ impl std::fmt::Debug for DatasetSyntaxError {
     }
 }
 
-impl ToPretty for [FeatureStartingFrom1] {}
+impl ToPretty for FeatureSet {}
 
-impl ToPretty for (&[FeatureStartingFrom1], FeatureStartingFrom1) {}
-
-impl std::fmt::Display for Pretty<&[FeatureStartingFrom1]> {
+impl std::fmt::Display for Pretty<&FeatureSet> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Pretty(features) = self;
 
         write!(f, "{{")?;
 
-        for (i, feature) in features.iter().enumerate() {
-            if i != 0 {
+        let mut has_written_at_least_one_feature = false;
+
+        for (feature_index_starting_from_0, is_included) in self.0 .0.iter().enumerate() {
+            if !is_included {
+                continue;
+            }
+
+            if has_written_at_least_one_feature {
                 write!(f, ",")?;
             }
-            write!(f, "{}", feature.0)?;
-        }
 
-        write!(f, "}}")
-    }
-}
+            write!(f, "{}", feature_index_starting_from_0 + 1)?;
 
-impl std::fmt::Display for Pretty<&(&[FeatureStartingFrom1], FeatureStartingFrom1)> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let Pretty((current_features, candidate_feature)) = self;
-
-        write!(f, "{{")?;
-
-        for (i, feature) in current_features
-            .iter()
-            .chain(std::iter::once(candidate_feature))
-            .enumerate()
-        {
-            if i != 0 {
-                write!(f, ",")?;
-            }
-            write!(f, "{}", feature.0)?;
+            has_written_at_least_one_feature = true;
         }
 
         write!(f, "}}")

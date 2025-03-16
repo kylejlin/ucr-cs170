@@ -50,7 +50,7 @@ pub struct Instance {
 }
 
 pub fn forward_selection(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
-    println!("Beginning forward search.");
+    println!("Beginning forward selection.");
 
     let mut current_set = vec![];
     let mut best_set = vec![];

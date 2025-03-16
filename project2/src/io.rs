@@ -12,6 +12,12 @@ impl BadDatasetSyntaxError {
     }
 }
 
+impl std::fmt::Debug for BadDatasetSyntaxError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "BadDatasetSyntaxError: {}", self.message)
+    }
+}
+
 /// This function parses a string and returns a dataset.
 /// It enforces the following constraints:
 /// - The class of each instance must be at least `1.0`. Classes are floored to integers.

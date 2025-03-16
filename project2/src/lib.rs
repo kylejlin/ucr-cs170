@@ -15,23 +15,6 @@ pub struct Dataset {
     pub instances: Vec<Instance>,
 }
 
-pub trait FeatureSet {
-    fn should_use(&self, feature: FeatureStartingFrom1) -> bool;
-}
-
-/// We use this for forward selection.
-pub struct WhitelistFeatureSet<T> {
-    features_to_use: T,
-}
-
-/// We use this for backward elimination.
-/// We technically could clone the vector of features
-/// and remove the feature we want to ignore, but
-/// this requires needless memory allocations.
-pub struct BlacklistFeatureSet<T> {
-    features_to_ignore: T,
-}
-
 /// We create a new type to help us remember
 /// that the classes are counted starting from 1.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -66,14 +49,19 @@ pub fn forward_selection(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
                 continue;
             }
 
+            // For performance reasons, rather than pass a vector of features
+            // (which we would have to iterate over for each instance),
+            // we pass a feature of coefficients (which are either `1.0` or `0.0`) instead.
+            // See the documentation comments for `leave_out_one_cross_validation` for more information.
             let accuracy = leave_out_one_cross_validation(
                 &dataset,
-                &WhitelistFeatureSet {
-                    features_to_use: current_set
+                // Use the union of the current set of features and the candidate feature.
+                &dataset.feature_coefficients_to_use_only(
+                    current_set
                         .iter()
                         .cloned()
                         .chain(std::iter::once(candidate_feature)),
-                },
+                ),
             );
 
             println!(
@@ -115,12 +103,21 @@ pub fn backward_elimination(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
     panic!("TODO: Backward search is not implemented yet.");
 }
 
-/// Performs leave-one-out cross validation on the dataset,
-/// but only using the features in `features_to_use`.
-/// Returns the accuracy (between 0 and 1).
-pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &impl FeatureSet) -> f64 {
+/// Performs leave-one-out cross validation on the dataset
+/// and returns the accuracy rate.
+/// When computing the distance between two instances,
+/// we multiply each feature value by the corresponding
+/// coefficient and sum the results.
+/// You can set the coefficients of the features you want to use to 1,
+/// and set the rest of the coefficients to 0.
+pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_coefficients: &[f64]) -> f64 {
     // TODO
     0.123456789
+}
+
+pub fn leave_out_one_cross_validation_with_all_features(dataset: &Dataset) -> f64 {
+    let feature_coefficients = vec![1.0; dataset.feature_count];
+    leave_out_one_cross_validation(dataset, &feature_coefficients)
 }
 
 impl Dataset {
@@ -128,29 +125,25 @@ impl Dataset {
         (1..=self.feature_count).map(FeatureStartingFrom1)
     }
 
-    pub fn set_of_all_features(
+    pub fn feature_coefficients_to_use_only(
         &self,
-    ) -> WhitelistFeatureSet<impl Iterator<Item = FeatureStartingFrom1> + Clone> {
-        WhitelistFeatureSet {
-            features_to_use: self.features(),
+        features_to_include: impl IntoIterator<Item = FeatureStartingFrom1>,
+    ) -> Vec<f64> {
+        let mut coefficients = vec![0.0; self.feature_count];
+        for feature in features_to_include {
+            coefficients[feature.0 - 1] = 1.0;
         }
+        coefficients
     }
-}
 
-impl<I> FeatureSet for WhitelistFeatureSet<I>
-where
-    I: Iterator<Item = FeatureStartingFrom1> + Clone,
-{
-    fn should_use(&self, feature: FeatureStartingFrom1) -> bool {
-        self.features_to_use.clone().any(|f| f == feature)
-    }
-}
-
-impl<I> FeatureSet for BlacklistFeatureSet<I>
-where
-    I: Iterator<Item = FeatureStartingFrom1> + Clone,
-{
-    fn should_use(&self, feature: FeatureStartingFrom1) -> bool {
-        !self.features_to_ignore.clone().any(|f| f == feature)
+    pub fn feature_coefficients_to_use_all_except(
+        &self,
+        features_to_exclude: impl IntoIterator<Item = FeatureStartingFrom1>,
+    ) -> Vec<f64> {
+        let mut coefficients = vec![1.0; self.feature_count];
+        for feature in features_to_exclude {
+            coefficients[feature.0 - 1] = 0.0;
+        }
+        coefficients
     }
 }

@@ -15,7 +15,7 @@ fn main() {
     println!(
         "Running nearest neighbor with all {} features, using “leaving-one-out” evaluation, I get an accuracy of {:.1}%.",
         dataset.feature_count,
-        leave_out_one_cross_validation(&dataset, &dataset.set_of_all_features())
+        leave_out_one_cross_validation_with_all_features(&dataset)
     );
 
     match algorithm {

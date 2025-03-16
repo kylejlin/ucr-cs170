@@ -2,6 +2,12 @@ pub mod io;
 
 use io::*;
 
+#[derive(Debug, Clone, Copy)]
+pub enum Algorithm {
+    ForwardSearch,
+    BackwardSearch,
+}
+
 #[derive(Debug)]
 pub struct Dataset {
     pub class_count: usize,
@@ -30,10 +36,12 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
     println!("Beginning forward search.");
 
     let mut current_set = vec![];
+    let mut best_set = vec![];
+    let mut best_accuracy = -1.0;
 
     for _ in 0..dataset.feature_count {
         let mut best_feature: Option<FeatureStartingFrom1> = None;
-        let mut best_accuracy = -1.0;
+        let mut best_accuracy_for_current_outer_iteration = -1.0;
 
         for candidate_feature in dataset.features() {
             // Don't add the feature if it's already in the set.
@@ -41,8 +49,13 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
                 continue;
             }
 
-            let accuracy =
-                leave_out_one_cross_validation(&dataset, &current_set, candidate_feature);
+            let accuracy = leave_out_one_cross_validation(
+                &dataset,
+                current_set
+                    .iter()
+                    .cloned()
+                    .chain(std::iter::once(candidate_feature)),
+            );
 
             println!(
                 "    Using feature(s) {} accuracy is {:.1}%",
@@ -50,8 +63,8 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
                 accuracy * 100.0
             );
 
-            if accuracy > best_accuracy {
-                best_accuracy = accuracy;
+            if accuracy > best_accuracy_for_current_outer_iteration {
+                best_accuracy_for_current_outer_iteration = accuracy;
                 best_feature = Some(candidate_feature);
             }
         }
@@ -61,23 +74,39 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
         println!(
             "Feature set {} was best, accuracy is {:.1}%",
             current_set.pretty(),
-            best_accuracy * 100.0
+            best_accuracy_for_current_outer_iteration * 100.0
         );
+
+        if best_accuracy_for_current_outer_iteration > best_accuracy {
+            best_accuracy = best_accuracy_for_current_outer_iteration;
+            best_set = current_set.clone();
+        }
     }
 
-    current_set
+    println!(
+        "Finished search! The best feature subset is {}, which has an accuracy of {:.1}%.",
+        best_set.pretty(),
+        best_accuracy * 100.0
+    );
+
+    best_set
 }
 
+pub fn backward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
+    panic!("TODO: Backward search is not implemented yet.");
+}
+
+/// Performs leave-one-out cross validation on the dataset,
+/// but only using the features in `features_to_use`.
 pub fn leave_out_one_cross_validation(
     dataset: &Dataset,
-    current_set: &[FeatureStartingFrom1],
-    candidate_feature: FeatureStartingFrom1,
+    features_to_use: impl Iterator<Item = FeatureStartingFrom1> + Clone,
 ) -> f64 {
     todo!()
 }
 
 impl Dataset {
-    pub fn features(&self) -> impl Iterator<Item = FeatureStartingFrom1> {
+    pub fn features(&self) -> impl Iterator<Item = FeatureStartingFrom1> + Clone {
         (1..=self.feature_count).map(FeatureStartingFrom1)
     }
 }

@@ -134,3 +134,52 @@ pub fn parse_dataset(s: &str) -> Result<Dataset, DatasetSyntaxError> {
         instances,
     })
 }
+
+/// Asks the user for a file path, and then reads the file at that path.
+/// If the file cannot be read (e.g., because the path points to a nonexistent location),
+/// then this function repeatedly asks the user for a file path until a valid file is found.
+pub fn ask_user_for_file_path_and_then_read_file() -> String {
+    loop {
+        print!("Type in the path to the file to test: ");
+
+        let path = read_line_from_stdin();
+        let path = std::path::Path::new(&path);
+
+        match std::fs::read_to_string(path) {
+            Ok(c) => return c,
+
+            Err(e) => {
+                println!("Error reading file: {:?}", e);
+                continue;
+            }
+        }
+    }
+}
+
+pub fn ask_user_for_algorithm() -> Algorithm {
+    loop {
+        println!("Type the number of the algorithm you want to run.");
+        println!("1) Forward Selection");
+        println!("2) Backward Elimination");
+        print!("Enter the number of the algorithm you want to run: ");
+
+        let choice = read_line_from_stdin();
+
+        match choice.trim() {
+            "1" => return Algorithm::ForwardSearch,
+
+            "2" => return Algorithm::BackwardSearch,
+
+            _ => {
+                println!("Invalid choice. Please enter 1 or 2.");
+                continue;
+            }
+        }
+    }
+}
+
+fn read_line_from_stdin() -> String {
+    use std::io::BufRead;
+
+    std::io::stdin().lock().lines().next().unwrap().unwrap()
+}

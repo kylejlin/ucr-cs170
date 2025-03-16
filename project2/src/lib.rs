@@ -98,6 +98,7 @@ pub fn backward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
 
 /// Performs leave-one-out cross validation on the dataset,
 /// but only using the features in `features_to_use`.
+/// Returns the accuracy (between 0 and 1).
 pub fn leave_out_one_cross_validation(
     dataset: &Dataset,
     features_to_use: impl Iterator<Item = FeatureStartingFrom1> + Clone,

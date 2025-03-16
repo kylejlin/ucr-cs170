@@ -176,9 +176,9 @@ pub fn ask_user_for_algorithm() -> Algorithm {
         let choice = read_line_from_stdin();
 
         match choice.trim() {
-            "1" => return Algorithm::ForwardSearch,
+            "1" => return Algorithm::ForwardSelection,
 
-            "2" => return Algorithm::BackwardSearch,
+            "2" => return Algorithm::BackwardElimination,
 
             _ => {
                 println!("Invalid choice. Please enter 1 or 2.");

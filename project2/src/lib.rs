@@ -4,8 +4,8 @@ use io::*;
 
 #[derive(Debug, Clone, Copy)]
 pub enum Algorithm {
-    ForwardSearch,
-    BackwardSearch,
+    ForwardSelection,
+    BackwardElimination,
 }
 
 #[derive(Debug)]
@@ -13,6 +13,23 @@ pub struct Dataset {
     pub class_count: usize,
     pub feature_count: usize,
     pub instances: Vec<Instance>,
+}
+
+pub trait FeatureSet {
+    fn should_use(&self, feature: FeatureStartingFrom1) -> bool;
+}
+
+/// We use this for forward selection.
+pub struct WhitelistFeatureSet<T> {
+    features_to_use: T,
+}
+
+/// We use this for backward elimination.
+/// We technically could clone the vector of features
+/// and remove the feature we want to ignore, but
+/// this requires needless memory allocations.
+pub struct BlacklistFeatureSet<T> {
+    features_to_ignore: T,
 }
 
 /// We create a new type to help us remember
@@ -32,7 +49,7 @@ pub struct Instance {
     pub feature_values: Vec<f64>,
 }
 
-pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
+pub fn forward_selection(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
     println!("Beginning forward search.");
 
     let mut current_set = vec![];
@@ -51,10 +68,12 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
 
             let accuracy = leave_out_one_cross_validation(
                 &dataset,
-                current_set
-                    .iter()
-                    .cloned()
-                    .chain(std::iter::once(candidate_feature)),
+                &WhitelistFeatureSet {
+                    features_to_use: current_set
+                        .iter()
+                        .cloned()
+                        .chain(std::iter::once(candidate_feature)),
+                },
             );
 
             println!(
@@ -92,31 +111,46 @@ pub fn forward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
     best_set
 }
 
-pub fn backward_search(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
+pub fn backward_elimination(dataset: &Dataset) -> Vec<FeatureStartingFrom1> {
     panic!("TODO: Backward search is not implemented yet.");
 }
 
 /// Performs leave-one-out cross validation on the dataset,
 /// but only using the features in `features_to_use`.
 /// Returns the accuracy (between 0 and 1).
-pub fn leave_out_one_cross_validation(
-    dataset: &Dataset,
-    features_to_use: impl Iterator<Item = FeatureStartingFrom1> + Clone,
-) -> f64 {
-    // Stub: for now, we just return a pseudo-random number.
-
-    let mut x: u32 = 45298425;
-
-    for feature in features_to_use.clone() {
-        x <<= 1;
-        x ^= (feature.0 as u32) * 9845245;
-    }
-
-    (x as f64) / (std::u32::MAX as f64)
+pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &impl FeatureSet) -> f64 {
+    // TODO
+    0.123456789
 }
 
 impl Dataset {
     pub fn features(&self) -> impl Iterator<Item = FeatureStartingFrom1> + Clone {
         (1..=self.feature_count).map(FeatureStartingFrom1)
+    }
+
+    pub fn set_of_all_features(
+        &self,
+    ) -> WhitelistFeatureSet<impl Iterator<Item = FeatureStartingFrom1> + Clone> {
+        WhitelistFeatureSet {
+            features_to_use: self.features(),
+        }
+    }
+}
+
+impl<I> FeatureSet for WhitelistFeatureSet<I>
+where
+    I: Iterator<Item = FeatureStartingFrom1> + Clone,
+{
+    fn should_use(&self, feature: FeatureStartingFrom1) -> bool {
+        self.features_to_use.clone().any(|f| f == feature)
+    }
+}
+
+impl<I> FeatureSet for BlacklistFeatureSet<I>
+where
+    I: Iterator<Item = FeatureStartingFrom1> + Clone,
+{
+    fn should_use(&self, feature: FeatureStartingFrom1) -> bool {
+        !self.features_to_ignore.clone().any(|f| f == feature)
     }
 }

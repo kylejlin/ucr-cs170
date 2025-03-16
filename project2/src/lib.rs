@@ -103,7 +103,16 @@ pub fn leave_out_one_cross_validation(
     dataset: &Dataset,
     features_to_use: impl Iterator<Item = FeatureStartingFrom1> + Clone,
 ) -> f64 {
-    todo!()
+    // Stub: for now, we just return a pseudo-random number.
+
+    let mut x: u32 = 45298425;
+
+    for feature in features_to_use.clone() {
+        x <<= 1;
+        x ^= (feature.0 as u32) * 9845245;
+    }
+
+    (x as f64) / (std::u32::MAX as f64)
 }
 
 impl Dataset {

@@ -16,12 +16,12 @@ pub struct Dataset {
 }
 
 /// We create a new type to help us remember
-/// that the classes are counted starting from 1.
+/// that the classes are counted starting from 1, not 0.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
 pub struct ClassStartingFrom1(pub usize);
 
 /// We create a new type to help us remember
-/// that the features are counted starting from 1.
+/// that the features are counted starting from 1, not 0.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct FeatureStartingFrom1(pub usize);
 

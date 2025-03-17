@@ -167,6 +167,9 @@ pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSe
 
             let square_distance = instance_to_classify.square_distance_to(neighbor, feature_set);
 
+            // Comparing square distances is equivalent to comparing distances
+            // (i.e., for any `a` and `b`, `a < b` if and only if `a*a < b*b`).
+            // This optimization avoids an unnecessary square root operation.
             if square_distance < closest_square_distance {
                 closest_square_distance = square_distance;
                 closest_class = neighbor.class;

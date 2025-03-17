@@ -15,8 +15,8 @@ fn main() {
 
     println!(
         "The default rate is {:.1}% (using class {}).",
-        dataset.default_class_and_rate().1 * 100.0,
-        dataset.default_class_and_rate().0
+        dataset.default_rate() * 100.0,
+        dataset.most_common_class(),
     );
 
     println!(

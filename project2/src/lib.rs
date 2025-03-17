@@ -40,7 +40,7 @@ pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
 
     let mut current_set = FeatureSet(vec![]);
     let mut best_set = FeatureSet(vec![]);
-    let mut best_accuracy = dataset.default_class_and_rate().1;
+    let mut best_accuracy = dataset.default_rate();
 
     for _ in 0..dataset.feature_count {
         let mut best_feature: Option<FeatureStartingFrom1> = None;
@@ -152,7 +152,7 @@ pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
 /// Only the features in `feature_set` are used.
 pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSet) -> f64 {
     if feature_set.is_empty() {
-        return dataset.default_class_and_rate().1;
+        return dataset.default_rate();
     }
 
     let mut correct_count = 0;
@@ -197,7 +197,15 @@ impl Dataset {
         FeatureSet(self.features().collect())
     }
 
-    pub fn default_class_and_rate(&self) -> (ClassStartingFrom1, f64) {
+    pub fn default_rate(&self) -> f64 {
+        self.default_class_and_rate().1
+    }
+
+    pub fn most_common_class(&self) -> ClassStartingFrom1 {
+        self.default_class_and_rate().0
+    }
+
+    fn default_class_and_rate(&self) -> (ClassStartingFrom1, f64) {
         use std::collections::HashMap;
 
         if self.instances.is_empty() {

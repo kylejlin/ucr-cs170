@@ -40,7 +40,7 @@ pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
 
     let mut current_set = FeatureSet(vec![]);
     let mut best_set = FeatureSet(vec![]);
-    let mut best_accuracy = -1.0;
+    let mut best_accuracy = dataset.default_class_and_rate().1;
 
     for _ in 0..dataset.feature_count {
         let mut best_feature: Option<FeatureStartingFrom1> = None;
@@ -151,6 +151,10 @@ pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
 /// and returns the accuracy rate.
 /// Only the features in `feature_set` are used.
 pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSet) -> f64 {
+    if feature_set.is_empty() {
+        return dataset.default_class_and_rate().1;
+    }
+
     let mut correct_count = 0;
 
     for (index_of_instance_of_to_classify, instance_to_classify) in
@@ -249,6 +253,10 @@ impl FeatureSet {
 
     pub fn iter(&self) -> impl Iterator<Item = FeatureStartingFrom1> + '_ {
         self.0.iter().copied()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
     }
 }
 

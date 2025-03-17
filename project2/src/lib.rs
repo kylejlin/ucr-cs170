@@ -153,25 +153,27 @@ pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
 pub fn leave_out_one_cross_validation(dataset: &Dataset, feature_set: &FeatureSet) -> f64 {
     let mut correct_count = 0;
 
-    for (instance_index, instance) in dataset.instances.iter().enumerate() {
+    for (index_of_instance_of_to_classify, instance_to_classify) in
+        dataset.instances.iter().enumerate()
+    {
         let mut closest_square_distance = f64::INFINITY;
-        let mut closest_class = ClassStartingFrom1(1);
+        let mut closest_class = ClassStartingFrom1(0);
 
-        for (other_index, other) in dataset.instances.iter().enumerate() {
+        for (neighbor_index, neighbor) in dataset.instances.iter().enumerate() {
             // Don't compare an instance to itself, since the distance is always 0.
-            if instance_index == other_index {
+            if index_of_instance_of_to_classify == neighbor_index {
                 continue;
             }
 
-            let square_distance = instance.square_distance_to(other, feature_set);
+            let square_distance = instance_to_classify.square_distance_to(neighbor, feature_set);
 
             if square_distance < closest_square_distance {
                 closest_square_distance = square_distance;
-                closest_class = other.class;
+                closest_class = neighbor.class;
             }
         }
 
-        if closest_class == instance.class {
+        if closest_class == instance_to_classify.class {
             correct_count += 1;
         }
     }

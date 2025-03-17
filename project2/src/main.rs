@@ -25,8 +25,13 @@ fn main() {
         leave_out_one_cross_validation(&dataset, &dataset.complete_feature_set()) * 100.0
     );
 
+    let start_time = std::time::Instant::now();
+
     match algorithm {
         Algorithm::ForwardSelection => forward_selection(&dataset),
         Algorithm::BackwardElimination => backward_elimination(&dataset),
     };
+
+    let elapsed = start_time.elapsed();
+    println!("The search took {:.1?} to complete.", elapsed);
 }

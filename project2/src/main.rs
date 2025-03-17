@@ -7,9 +7,16 @@ fn main() {
     let algorithm = io::ask_user_for_algorithm();
 
     println!(
-        "This dataset has {} features (not including the class attribute), with {} instances.",
+        "This dataset has {} classes and {} features (not including the class attribute), with {} instances.",
+        dataset.class_count,
         dataset.feature_count,
         dataset.instances.len(),
+    );
+
+    println!(
+        "The default rate is {:.1}% (using class {}).",
+        dataset.default_class_and_rate().1 * 100.0,
+        dataset.default_class_and_rate().0
     );
 
     println!(

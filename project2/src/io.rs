@@ -32,15 +32,27 @@ impl std::fmt::Display for Pretty<&FeatureSet> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{{")?;
 
-        for (i, FeatureStartingFrom1(feature)) in self.0 .0.iter().enumerate() {
+        for (i, feature) in self.0 .0.iter().enumerate() {
             if i != 0 {
                 write!(f, ",")?;
             }
 
-            write!(f, "{}", feature)?;
+            write!(f, "{feature}")?;
         }
 
         write!(f, "}}")
+    }
+}
+
+impl std::fmt::Display for FeatureStartingFrom1 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl std::fmt::Display for ClassStartingFrom1 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 
@@ -49,8 +61,10 @@ impl std::fmt::Display for Pretty<&FeatureSet> {
 /// - The class of each instance must be at least `1.0`. Classes are floored to integers.
 /// - The number of features in each instance must be consistent.
 pub fn parse_dataset(s: &str) -> Result<Dataset, DatasetSyntaxError> {
+    use std::collections::HashSet;
+
     let mut instances = vec![];
-    let mut class_count = 0;
+    let mut classes: HashSet<ClassStartingFrom1> = HashSet::new();
     let mut data_set_feature_count = 0;
 
     for (line_index, line) in s.lines().enumerate() {
@@ -74,7 +88,7 @@ pub fn parse_dataset(s: &str) -> Result<Dataset, DatasetSyntaxError> {
         }
         let class = ClassStartingFrom1(class as usize);
 
-        class_count = class_count.max(class.0);
+        classes.insert(class);
 
         let instance_feature_count = parts.clone().count();
 
@@ -105,7 +119,7 @@ pub fn parse_dataset(s: &str) -> Result<Dataset, DatasetSyntaxError> {
     }
 
     Ok(Dataset {
-        class_count,
+        class_count: classes.len(),
         feature_count: data_set_feature_count,
         instances,
     })

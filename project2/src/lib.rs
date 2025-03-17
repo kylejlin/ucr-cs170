@@ -17,7 +17,7 @@ pub struct Dataset {
 
 /// We create a new type to help us remember
 /// that the classes are counted starting from 1.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
 pub struct ClassStartingFrom1(pub usize);
 
 /// We create a new type to help us remember
@@ -191,6 +191,34 @@ impl Dataset {
 
     pub fn complete_feature_set(&self) -> FeatureSet {
         FeatureSet(self.features().collect())
+    }
+
+    pub fn default_class_and_rate(&self) -> (ClassStartingFrom1, f64) {
+        use std::collections::HashMap;
+
+        if self.instances.is_empty() {
+            panic!("cannot compute default rate of an empty dataset");
+        }
+
+        let mut class_counts: HashMap<ClassStartingFrom1, usize> = HashMap::new();
+
+        for instance in &self.instances {
+            *class_counts.entry(instance.class).or_insert(0) += 1;
+        }
+
+        let mut max_count = 0;
+        let mut class_with_max_count = ClassStartingFrom1(0);
+        for (class, count) in class_counts {
+            if count > max_count {
+                max_count = count;
+                class_with_max_count = class;
+            }
+        }
+
+        let default_class = class_with_max_count;
+        let default_rate = (max_count as f64) / (self.instances.len() as f64);
+
+        (default_class, default_rate)
     }
 }
 

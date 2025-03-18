@@ -1,0 +1,310 @@
+(base) kyle@MacBookPro project2 % cargo run --release
+    Finished `release` profile [optimized] target(s) in 0.02s
+     Running `target/release/cs170_project2`
+Welcome to Kyle Lin's Feature Selection Algorithm!
+Type in the path to the file to test:
+creditcard.txt
+The file you specified contained a syntax error: BadDatasetSyntaxError: invalid class on line 1: 2,-1.136701201,0.1858251607,-1.245999081,1.794533954,1.782318466,-0.6966518452,-0.6665876213,-1.530020534,-1.48601599,-0.6424903645,-0.6473884404,-0.6679821772,-0.6724860603,-0.6630474807,-0.6527133393,-0.3419359196,-0.227081851,-0.2967963273,-0.3080574273,-0.3141308817,-0.2933771682
+Type in the path to the file to test:
+^C
+(base) kyle@MacBookPro project2 % cargo run --release
+    Finished `release` profile [optimized] target(s) in 0.02s
+     Running `target/release/cs170_project2`
+Welcome to Kyle Lin's Feature Selection Algorithm!
+Type in the path to the file to test:
+creditcard.txt
+Type the number of the algorithm you want to run.
+1) Forward Selection
+2) Backward Elimination
+Enter the number of the algorithm you want to run:
+^C
+(base) kyle@MacBookPro project2 % git add .
+g%                                                                              (base) kyle@MacBookPro project2 % git commit -m "Replace commas with spaces in creditcard.txt"
+[main 9e5a0c8] Replace commas with spaces in creditcard.txt
+ 1 file changed, 30000 insertions(+), 30000 deletions(-)
+(base) kyle@MacBookPro project2 % git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+(base) kyle@MacBookPro project2 % git push
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 2.12 MiB | 477.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/kylejlin/ucr-cs170.git
+   368930d..9e5a0c8  main -> main
+(base) kyle@MacBookPro project2 % cargo run --release
+    Finished `release` profile [optimized] target(s) in 0.00s
+     Running `target/release/cs170_project2`
+Welcome to Kyle Lin's Feature Selection Algorithm!
+Type in the path to the file to test:
+creditcard.txt
+Type the number of the algorithm you want to run.
+1) Forward Selection
+2) Backward Elimination
+Enter the number of the algorithm you want to run:
+1
+This dataset has 2 classes and 21 features (not including the class attribute), with 30000 instances.
+The default rate is 77.9% (using class 1).
+Running nearest neighbor with all 21 features, using “leaving-one-out” evaluation, I get an accuracy of 73.5%.
+Beginning forward selection.
+    Using feature(s) {1} accuracy is 63.9%
+    Using feature(s) {2} accuracy is 52.5%
+    Using feature(s) {3} accuracy is 55.5%
+    Using feature(s) {4} accuracy is 64.8%
+    Using feature(s) {5} accuracy is 79.4%
+    Using feature(s) {6} accuracy is 30.1%
+    Using feature(s) {7} accuracy is 31.0%
+    Using feature(s) {8} accuracy is 34.5%
+    Using feature(s) {9} accuracy is 68.4%
+    Using feature(s) {10} accuracy is 66.9%
+    Using feature(s) {11} accuracy is 67.0%
+    Using feature(s) {12} accuracy is 67.3%
+    Using feature(s) {13} accuracy is 62.0%
+    Using feature(s) {14} accuracy is 61.6%
+    Using feature(s) {15} accuracy is 60.4%
+    Using feature(s) {16} accuracy is 66.2%
+    Using feature(s) {17} accuracy is 68.9%
+    Using feature(s) {18} accuracy is 56.7%
+    Using feature(s) {19} accuracy is 59.6%
+    Using feature(s) {20} accuracy is 58.5%
+    Using feature(s) {21} accuracy is 59.1%
+Feature set {5} was best, accuracy is 79.4%
+    Using feature(s) {5,1} accuracy is 64.8%
+    Using feature(s) {5,2} accuracy is 78.4%
+    Using feature(s) {5,3} accuracy is 66.7%
+    Using feature(s) {5,4} accuracy is 79.0%
+    Using feature(s) {5,6} accuracy is 78.3%
+    Using feature(s) {5,7} accuracy is 76.4%
+    Using feature(s) {5,8} accuracy is 77.6%
+    Using feature(s) {5,9} accuracy is 74.6%
+    Using feature(s) {5,10} accuracy is 70.0%
+    Using feature(s) {5,11} accuracy is 71.1%
+    Using feature(s) {5,12} accuracy is 69.5%
+    Using feature(s) {5,13} accuracy is 68.3%
+    Using feature(s) {5,14} accuracy is 67.7%
+    Using feature(s) {5,15} accuracy is 66.6%
+    Using feature(s) {5,16} accuracy is 72.7%
+    Using feature(s) {5,17} accuracy is 71.1%
+    Using feature(s) {5,18} accuracy is 69.7%
+    Using feature(s) {5,19} accuracy is 68.6%
+    Using feature(s) {5,20} accuracy is 68.5%
+    Using feature(s) {5,21} accuracy is 70.9%
+Feature set {5,4} was best, accuracy is 79.0%
+    Using feature(s) {5,4,1} accuracy is 69.1%
+    Using feature(s) {5,4,2} accuracy is 71.6%
+    Using feature(s) {5,4,3} accuracy is 71.5%
+    Using feature(s) {5,4,6} accuracy is 78.2%
+    Using feature(s) {5,4,7} accuracy is 75.1%
+    Using feature(s) {5,4,8} accuracy is 71.7%
+    Using feature(s) {5,4,9} accuracy is 64.5%
+    Using feature(s) {5,4,10} accuracy is 72.6%
+    Using feature(s) {5,4,11} accuracy is 73.5%
+    Using feature(s) {5,4,12} accuracy is 73.4%
+    Using feature(s) {5,4,13} accuracy is 70.7%
+    Using feature(s) {5,4,14} accuracy is 70.3%
+    Using feature(s) {5,4,15} accuracy is 69.5%
+    Using feature(s) {5,4,16} accuracy is 74.3%
+    Using feature(s) {5,4,17} accuracy is 74.3%
+    Using feature(s) {5,4,18} accuracy is 72.0%
+    Using feature(s) {5,4,19} accuracy is 70.3%
+    Using feature(s) {5,4,20} accuracy is 66.4%
+    Using feature(s) {5,4,21} accuracy is 68.0%
+Feature set {5,4,6} was best, accuracy is 78.2%
+    Using feature(s) {5,4,6,1} accuracy is 73.0%
+    Using feature(s) {5,4,6,2} accuracy is 73.6%
+    Using feature(s) {5,4,6,3} accuracy is 70.9%
+    Using feature(s) {5,4,6,7} accuracy is 78.5%
+    Using feature(s) {5,4,6,8} accuracy is 72.1%
+    Using feature(s) {5,4,6,9} accuracy is 67.1%
+    Using feature(s) {5,4,6,10} accuracy is 73.2%
+    Using feature(s) {5,4,6,11} accuracy is 73.7%
+    Using feature(s) {5,4,6,12} accuracy is 73.5%
+    Using feature(s) {5,4,6,13} accuracy is 72.2%
+    Using feature(s) {5,4,6,14} accuracy is 70.7%
+    Using feature(s) {5,4,6,15} accuracy is 70.0%
+    Using feature(s) {5,4,6,16} accuracy is 73.8%
+    Using feature(s) {5,4,6,17} accuracy is 74.0%
+    Using feature(s) {5,4,6,18} accuracy is 73.7%
+    Using feature(s) {5,4,6,19} accuracy is 72.3%
+    Using feature(s) {5,4,6,20} accuracy is 66.9%
+    Using feature(s) {5,4,6,21} accuracy is 72.8%
+Feature set {5,4,6,7} was best, accuracy is 78.5%
+    Using feature(s) {5,4,6,7,1} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,2} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,3} accuracy is 71.6%
+    Using feature(s) {5,4,6,7,8} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,9} accuracy is 68.0%
+    Using feature(s) {5,4,6,7,10} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,11} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,12} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,13} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,14} accuracy is 71.6%
+    Using feature(s) {5,4,6,7,15} accuracy is 71.7%
+    Using feature(s) {5,4,6,7,16} accuracy is 74.2%
+    Using feature(s) {5,4,6,7,17} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,18} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,19} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,20} accuracy is 70.3%
+    Using feature(s) {5,4,6,7,21} accuracy is 71.7%
+Feature set {5,4,6,7,16} was best, accuracy is 74.2%
+    Using feature(s) {5,4,6,7,16,1} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,2} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,3} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,16,8} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,16,9} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,10} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,11} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,12} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,13} accuracy is 73.0%
+    Using feature(s) {5,4,6,7,16,14} accuracy is 72.6%
+    Using feature(s) {5,4,6,7,16,15} accuracy is 72.6%
+    Using feature(s) {5,4,6,7,16,17} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,18} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,19} accuracy is 72.8%
+    Using feature(s) {5,4,6,7,16,20} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,16,21} accuracy is 73.0%
+Feature set {5,4,6,7,16,17} was best, accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,1} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,2} accuracy is 72.6%
+    Using feature(s) {5,4,6,7,16,17,3} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,8} accuracy is 72.3%
+    Using feature(s) {5,4,6,7,16,17,9} accuracy is 72.5%
+    Using feature(s) {5,4,6,7,16,17,10} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,11} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,12} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,13} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,14} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,16,17,15} accuracy is 72.8%
+    Using feature(s) {5,4,6,7,16,17,18} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,19} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,16,17,20} accuracy is 72.9%
+    Using feature(s) {5,4,6,7,16,17,21} accuracy is 74.1%
+Feature set {5,4,6,7,16,17,21} was best, accuracy is 74.1%
+    Using feature(s) {5,4,6,7,16,17,21,1} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,2} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,3} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,16,17,21,8} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,9} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,10} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,17,21,11} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,12} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,14} accuracy is 73.0%
+    Using feature(s) {5,4,6,7,16,17,21,15} accuracy is 72.7%
+    Using feature(s) {5,4,6,7,16,17,21,18} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,19} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,20} accuracy is 73.3%
+Feature set {5,4,6,7,16,17,21,13} was best, accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,1} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,2} accuracy is 72.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,3} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,8} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,9} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,10} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,11} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,12} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,14} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,15} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,18} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,19} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,20} accuracy is 73.3%
+Feature set {5,4,6,7,16,17,21,13,11} was best, accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,1} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,2} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,3} accuracy is 73.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,8} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,9} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,10} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,14} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,15} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,18} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,19} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,20} accuracy is 73.3%
+Feature set {5,4,6,7,16,17,21,13,11,12} was best, accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,1} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,2} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,3} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,8} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,9} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,10} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,14} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,15} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,19} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,20} accuracy is 73.5%
+Feature set {5,4,6,7,16,17,21,13,11,12,18} was best, accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,1} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,2} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,3} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,8} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,9} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,14} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,15} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,19} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,20} accuracy is 73.5%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10} was best, accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,1} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,2} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,3} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,8} accuracy is 73.3%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,14} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,15} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,19} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,20} accuracy is 73.5%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9} was best, accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,2} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,3} accuracy is 73.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,8} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,14} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,15} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,19} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,20} accuracy is 73.6%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1} was best, accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,2} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,3} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,8} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,14} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,15} accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19} accuracy is 74.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,20} accuracy is 73.7%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19} was best, accuracy is 74.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,2} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,3} accuracy is 73.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8} accuracy is 74.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,14} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,15} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,20} accuracy is 73.8%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8} was best, accuracy is 74.1%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,2} accuracy is 73.9%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,3} accuracy is 73.2%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,15} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,20} accuracy is 73.9%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14} was best, accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2} accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,3} accuracy is 73.4%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,15} accuracy is 73.7%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,20} accuracy is 73.8%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2} was best, accuracy is 74.0%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,3} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15} accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,20} accuracy is 73.7%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15} was best, accuracy is 73.8%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15,3} accuracy is 73.5%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15,20} accuracy is 73.6%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15,20} was best, accuracy is 73.6%
+    Using feature(s) {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15,20,3} accuracy is 73.5%
+Feature set {5,4,6,7,16,17,21,13,11,12,18,10,9,1,19,8,14,2,15,20,3} was best, accuracy is 73.5%
+Finished search! The best feature subset is {5}, which has an accuracy of 79.4%.
+The search took 1069.4s to complete.
+(base) kyle@MacBookPro project2 % 

@@ -1,0 +1,26 @@
+Feature 1: LIMIT_BAL
+Feature 2: EDUCATION
+Feature 3: AGE
+Feature 4: PAY_0
+Feature 5: PAY_2
+Feature 6: PAY_3
+Feature 7: PAY_4
+Feature 8: PAY_5
+Feature 9: PAY_6
+Feature 10: BILL_AMT1
+Feature 11: BILL_AMT2
+Feature 12: BILL_AMT3
+Feature 13: BILL_AMT4
+Feature 14: BILL_AMT5
+Feature 15: BILL_AMT6
+Feature 16: PAY_AMT1
+Feature 17: PAY_AMT2
+Feature 18: PAY_AMT3
+Feature 19: PAY_AMT4
+Feature 20: PAY_AMT5
+Feature 21: PAY_AMT6
+
+Class: DEFAULT (1 = no default, 2 = default)
+
+// More information about the dataset can be found at:
+// https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients

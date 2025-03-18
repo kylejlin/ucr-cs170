@@ -36,7 +36,7 @@ pub struct Instance {
 }
 
 pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
-    println!("Beginning forward selection.");
+    println!("Beginning search.");
 
     let mut current_set = FeatureSet(vec![]);
     let mut best_set = FeatureSet(vec![]);
@@ -92,7 +92,7 @@ pub fn forward_selection(dataset: &Dataset) -> FeatureSet {
 }
 
 pub fn backward_elimination(dataset: &Dataset) -> FeatureSet {
-    println!("Beginning backward elimination.");
+    println!("Beginning search.");
 
     let mut current_set = dataset.complete_feature_set();
     let mut best_set = dataset.complete_feature_set();

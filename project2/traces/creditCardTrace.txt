@@ -9,7 +9,7 @@ Enter the number of the algorithm you want to run:
 This dataset has 2 classes and 21 features (not including the class attribute), with 30000 instances.
 The default rate is 77.9% (using class 1).
 Running nearest neighbor with all 21 features, using “leaving-one-out” evaluation, I get an accuracy of 73.5%.
-Beginning forward selection.
+Beginning search.
     Using feature(s) {1} accuracy is 63.9%
     Using feature(s) {2} accuracy is 52.5%
     Using feature(s) {3} accuracy is 55.5%
